@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head> 
+    <title>Cadastro de Endereço MVC</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h1>Cadastro de Endereco MVC</h1>
+    <form action="#" th:action="@{/cadastrar}" th:object="${endereco}" method="post">
+    	<p>Rua: <input type="text" th:field="*{rua}" /></p>        
+    	<p>Cidade : <input type="text" th:field="*{cidade}" /></p>
+        <p><input type="submit" value="Submit" />
+        <input type="reset" value="Reset" /></p>
+    </form>
+    
+	
+	<p th:text="${erro}" />
+    <!--  CONT. IMPLEMENTACAO -->
+     
+</body>
+</html>
