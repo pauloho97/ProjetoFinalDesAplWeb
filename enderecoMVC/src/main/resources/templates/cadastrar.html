@@ -9,11 +9,14 @@
     <form action="#" th:action="@{/cadastrar}" th:object="${endereco}" method="post">
     	<p>Rua: <input type="text" th:field="*{rua}" /></p>        
     	<p>Cidade : <input type="text" th:field="*{cidade}" /></p>
+    	<p>cep : <input type="text" th:field="*{cep}" /></p>
         <p><input type="submit" value="Submit" />
         <input type="reset" value="Reset" /></p>
+        
+          
     </form>
     
-	
+	<a href="/buscar">Filtrar lista de cadastro</a>  
 	<p th:text="${erro}" />
     <!--  CONT. IMPLEMENTACAO -->
      

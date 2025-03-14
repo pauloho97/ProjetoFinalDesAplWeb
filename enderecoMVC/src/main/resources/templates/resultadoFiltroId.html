@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head> 
+    <title>Listagem da busca dos endereços</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <h1>Listagem da busca dos endereços</h1>
+
+    
+
+    
+    <!-- Exibindo a lista de endereços encontrados -->
+    <div th:if="${lista_endereco != null and not #lists.isEmpty(lista_endereco)}">
+        <table border="1">
+            <!-- Cabeçalho da tabela -->
+            <tr>
+                <th>Código</th>
+                <th>Rua</th>
+                <th>Cidade</th>
+                <th>CEP</th>
+            </tr>
+
+            <!-- Exibindo a lista de endereços -->
+            <tr th:each="endereco : ${lista_endereco}">
+                <td th:text="${endereco.codigo}"></td>
+                <td th:text="${endereco.rua}"></td>
+                <td th:text="${endereco.cidade}"></td>
+                <td th:text="${endereco.cep}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Link para cadastro de novo endereço -->
+    <a href="/inicio_cadastrar">Cadastrar novo endereço</a>
+</body>
+</html>
