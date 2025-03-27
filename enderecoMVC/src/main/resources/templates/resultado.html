@@ -20,10 +20,8 @@
 	    <td th:text="${lista.cidade}" />
 	    <td th:text="${lista.cep}" />
 	    <td>  
-	    	<form th:action="@{/deletar}" method="post" >
-                <input type="hidden" name="codigo" th:value="${endereco.codigo}" />
-                <button type="submit">Deletar </button>
-            </form>
+			<a th:if="${endereco != null and endereco.codigo != null}" th:href="@{/deletar(id=${endereco.codigo})}">Deletar</a>
+
         </td>
 	    
 	</tr>

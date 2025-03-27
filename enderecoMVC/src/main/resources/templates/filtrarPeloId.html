@@ -14,7 +14,7 @@
 
     <!-- Formulário de busca -->
     <form th:action="@{/resultadoBuscado}" method="post" th:object="${endereco}">
-        <p>Código: <input type="text" th:field="*{codigo}" /></p>
+        <p>Código: <input type="text" th:field="*{codigo}" name"codigo" /></p>
         <button type="submit">Buscar</button>
     </form>
 
