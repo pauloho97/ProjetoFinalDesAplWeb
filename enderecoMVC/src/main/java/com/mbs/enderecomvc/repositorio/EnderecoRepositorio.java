@@ -26,8 +26,8 @@ public class EnderecoRepositorio {
 	}
 
 	public String remover(Integer id) {
-		// A variável "e" a ponta para o getCodigo e verifica caso tenha ela na lista
-		boolean removido = listaEndereco.removeIf(e -> e.getCodigo().equals(id));
+		// A variável "e" aponta para o getCodigo e verifica caso tenha ela na lista
+		boolean removido = listaEndereco.removeIf((e) -> e.getCodigo().equals(id));
 
 		if (removido) {
 			return "Endereço removido com sucesso";
@@ -36,7 +36,7 @@ public class EnderecoRepositorio {
 		}
 	}
 
-	public List<Endereco> buscar() {
+	public List<Endereco> buscar(Integer id) {
 		List<Endereco> resultadoBusca = new ArrayList<>();
 
 		// Verifica se o código existe na lista de endereços

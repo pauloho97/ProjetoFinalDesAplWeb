@@ -44,8 +44,8 @@ public class EnderecoControllerMVC {
 	// CONTINUAR AS IMPLEMENTACOES
 	// O "deletar" irá acionar o método, no html será em action "@{/deletar}"
 	@GetMapping("/deletar")
-	public String delete(@RequestParam("id") Integer id, Model model) {
-	    String mensagem = enderecoServico.remover(id);
+	public String delete(@RequestParam("id") String id, Model model) {
+		String mensagem = enderecoServico.remover(Integer.parseInt(id));
 	    model.addAttribute("mensagem", mensagem); // Exibir feedback para o usuário
 	    model.addAttribute("lista_endereco", enderecoServico.listar()); // Atualizar a lista
 
@@ -62,7 +62,7 @@ public class EnderecoControllerMVC {
 		if (!resultado.isEmpty()) {
 			model.addAttribute("resultado", resultado); // Passa o resultado para a view
 		} else {
-			model.addAttribute("erro", "Endereço não encontrado"); // Adiciona erro caso não encontre
+	    	 model.addAttribute("houveBusca", false); // Indica que ainda não houve busca		
 		}
 		// Retornar a view onde a tabela será exibida
 		return "filtrarPeloId";
@@ -73,9 +73,10 @@ public class EnderecoControllerMVC {
 		 System.out.println("Buscando ID: " + id);
 
 		    List<Endereco> resultado = enderecoServico.buscar(id); // Busca pelo ID
+		    model.addAttribute("houveBusca", true); // Agora houve uma busca
 
 		    if (!resultado.isEmpty()) {
-		        model.addAttribute("resultado", resultado);
+		        model.addAttribute("lista_endereco", resultado);
 		    } else {
 		        model.addAttribute("erro", "Endereço não encontrado!");
 		    }

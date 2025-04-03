@@ -20,12 +20,15 @@
 	    <td th:text="${lista.cidade}" />
 	    <td th:text="${lista.cep}" />
 	    <td>  
-			<a th:if="${endereco != null and endereco.codigo != null}" th:href="@{/deletar(id=${endereco.codigo})}">Deletar</a>
+    		<a th:href="@{/deletar(id=${lista.codigo})}" th:text="'Deletar (' + ${lista.codigo} + ')'"></a>
 
         </td>
 	    
 	</tr>
 	</table>
+	
+	<p th:if="${mensagem}" th:text="${mensagem}" style="color: green;"></p>
+	
     
         <!--  CONT. IMPLEMENTACAO -->
     

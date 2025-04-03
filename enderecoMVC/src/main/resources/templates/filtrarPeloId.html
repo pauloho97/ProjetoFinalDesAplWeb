@@ -8,13 +8,13 @@
     <h1>Listagem da busca dos endereços</h1>
 
     <!-- Exibindo erro caso haja -->
-    <div th:if="${erro}" style="color: red;">
+    <div th:if="${houveBusca and erro != null}" style="color: red;">
         <p th:text="${erro}"></p>
     </div>
 
     <!-- Formulário de busca -->
     <form th:action="@{/resultadoBuscado}" method="post" th:object="${endereco}">
-        <p>Código: <input type="text" th:field="*{codigo}" name"codigo" /></p>
+        <p>Código: <input type="text" th:field="*{codigo}" name="codigo" /></p>
         <button type="submit">Buscar</button>
     </form>
 

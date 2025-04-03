@@ -45,7 +45,7 @@ public class EnderecoServico {
 	}
 	
 	public List<Endereco> buscar(Integer id){
-		List<Endereco> resultadosList = enderecoRepositorio.buscar();
+		List<Endereco> resultadosList = enderecoRepositorio.buscar(id);
 		
 		// Adiciona os resultados ou erro ao modelo
 	    if (resultadosList == null || resultadosList.isEmpty()) {
