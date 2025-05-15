@@ -36,18 +36,19 @@ public class EnderecoRepositorio {
 		}
 	}
 
-	public List<Endereco> buscar(Integer id) {
-		List<Endereco> resultadoBusca = new ArrayList<>();
+	public List<Endereco> buscar(Integer id, String cep) {
+	    List<Endereco> resultadoBusca = new ArrayList<>();
 
-		// Verifica se o código existe na lista de endereços
-		for (Endereco e : listaEndereco) {
-			if (e.getCodigo().equals(id)) {
-				resultadoBusca.add(e);
-				break; // Encontrou o código, então sai do loop
-			}
-		}
+	    for (Endereco e : listaEndereco) {
+	        boolean idConfere = (id != null && e.getCodigo().equals(id));
+	        boolean cepConfere = (cep != null && !cep.trim().isEmpty() && e.getCep().equalsIgnoreCase(cep));
 
-		return resultadoBusca;
+	        if (idConfere || cepConfere) {
+	            resultadoBusca.add(e);
+	        }
+	    }
+
+	    return resultadoBusca;
 	}
 
 }

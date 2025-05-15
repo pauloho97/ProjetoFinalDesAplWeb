@@ -55,7 +55,7 @@ public class EnderecoControllerMVC {
 	// método para acessar a página
 	@GetMapping("/buscar")
 	public String BuscarPeloId(Integer id, Model model) {
-		List<Endereco> resultado = enderecoServico.buscar(id);
+		List<Endereco> resultado = enderecoServico.buscar(id, null);
 		
 		model.addAttribute("endereco", new Endereco());
 
@@ -65,22 +65,30 @@ public class EnderecoControllerMVC {
 	    	 model.addAttribute("houveBusca", false); // Indica que ainda não houve busca		
 		}
 		// Retornar a view onde a tabela será exibida
-		return "filtrarPeloId";
+		return "filtrarPeloIdCep";
 	}
 
 	@PostMapping("/resultadoBuscado")
-	public String buscarCodigo(@RequestParam("codigo") Integer id, Model model) {
-		 System.out.println("Buscando ID: " + id);
+	public String buscarCodigoOuCep(@RequestParam(name = "codigo", required = false) Integer id,
+	                                @RequestParam(name = "cep", required = false) String cep,
+	                                Model model) {
+	    model.addAttribute("houveBusca", true); // Indica que houve uma busca
 
-		    List<Endereco> resultado = enderecoServico.buscar(id); // Busca pelo ID
-		    model.addAttribute("houveBusca", true); // Agora houve uma busca
+	    List<Endereco> resultado = new ArrayList<>();
 
-		    if (!resultado.isEmpty()) {
-		        model.addAttribute("lista_endereco", resultado);
-		    } else {
-		        model.addAttribute("erro", "Endereço não encontrado!");
-		    }
-		return "resultadoFiltroId";
+	    if (id != null) {
+	        resultado = enderecoServico.buscar(id, cep); // busca por ID
+	    } else if (cep != null && !cep.isEmpty()) {
+	        resultado = enderecoServico.buscar(id, cep); // busca por CEP (você precisa ter esse método no serviço)
+	    }
+
+	    if (!resultado.isEmpty()) {
+	        model.addAttribute("lista_endereco", resultado);
+	    } else {
+	        model.addAttribute("erro", "Endereço não encontrado!");
+	    }
+
+	    return "resultadoFiltroIdCep";
 	}
 
 }

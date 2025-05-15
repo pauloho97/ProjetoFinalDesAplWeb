@@ -12,14 +12,12 @@
         <p th:text="${erro}"></p>
     </div>
 
-    <!-- Formulário de busca -->
-    <form th:action="@{/resultadoBuscado}" method="post" th:object="${endereco}">
-        <p>Código: <input type="text" th:field="*{codigo}" name="codigo" /></p>
+    <!-- Formulário de busca por código e/ou CEP -->
+    <form th:action="@{/resultadoBuscado}" method="post">
+        <p>Código: <input type="text" name="codigo" /></p>
+        <p>CEP: <input type="text" name="cep" /></p>
         <button type="submit">Buscar</button>
     </form>
-
-   
-    </div>
 
     <!-- Link para cadastro de novo endereço -->
     <a href="/inicio_cadastrar">Cadastrar novo endereço</a>

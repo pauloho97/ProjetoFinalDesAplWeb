@@ -44,17 +44,14 @@ public class EnderecoServico {
 		return enderecoRepositorio.remover(id);
 	}
 	
-	public List<Endereco> buscar(Integer id){
-		List<Endereco> resultadosList = enderecoRepositorio.buscar(id);
-		
-		// Adiciona os resultados ou erro ao modelo
+	public List<Endereco> buscar(Integer id, String cep) {
+	    List<Endereco> resultadosList = enderecoRepositorio.buscar(id, cep);
+
 	    if (resultadosList == null || resultadosList.isEmpty()) {
-	       
-	    	//função da classe Collections para retornar lista vazia
-	        return Collections.emptyList(); 
-	        
+	        return Collections.emptyList();
 	    }
-		return resultadosList;
+
+	    return resultadosList;
 	}
 
 }
