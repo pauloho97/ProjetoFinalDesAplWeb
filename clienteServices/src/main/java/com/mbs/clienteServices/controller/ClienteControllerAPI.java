@@ -39,8 +39,7 @@ public class ClienteControllerAPI {
 
 		// simples validacao de negocio
 		if (cliente.getNome() == null || (cliente.getNome() != null && cliente.getNome().length() <= 2)) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body("Nome do cliente deve ter no minimo 3 caracteres");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nome do cliente deve ter no minimo 3 caracteres");
 		}
 		// cria um id para o cliente
 		cliente.setId(++id);
