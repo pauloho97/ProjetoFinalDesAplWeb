@@ -2,6 +2,7 @@ package com.mbs.vendasServices.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,21 +24,48 @@ public class VendasService {
 	}
 
 	private void validacao(Venda venda) throws Exception {
-		// validacoes
-		if (venda.getCodCliente() == null) {
-			throw new Exception("cod cliente invalido");
-		}
-		if (venda.getNomeProduto() == null || venda.getNomeProduto().equals("")) {
-			throw new Exception("nome produto invalido");
+		
+		//matriz do tipo Object que contém: [funções boolean, String].
+		Object funcoesParaEntradasInvalidasObject[][] = {
+				{ codigoClienteInvalido(venda), "Código do cliente inválido" },
+				{ nomeProdutoInvalido(venda), "Nome da obra inválido" },
+				{ quantidadeMenorqueZeroOuVazia(venda), "Quantidade inválida" },
+				{ precoProdutoMenorQueZeroOuNulo(venda), "Preço da obra inválido" },
+				{ celularNuloOuVazio(venda), "Celular inválido" },
+				{ artistaNuloOuvazio(venda), "Nome do artista inválido" }, };
+		
+		for (Object[] listandoObject : funcoesParaEntradasInvalidasObject) {
+			//se o primeiro elemento da lista for true, ele exibe seu par String
+			if((boolean) listandoObject [0]) {
+				throw new Exception((String) listandoObject[1]);
+			}
 		}
 
-		if (venda.getQuantidade() == null) {
-			throw new Exception("quantidadevenda invalido");
-		}
+	}
 
-		if (venda.getPrecoProduto() == null) {
-			throw new Exception("preco venda invalido");
-		}
+	// pequenas funções com regras de negócios
+	private boolean codigoClienteInvalido(Venda venda) {
+		return venda.getCodCliente() == null;
+	}
+
+	private boolean nomeProdutoInvalido(Venda venda) {
+		return venda.getNomeProduto() == null || venda.getNomeProduto().trim().isEmpty();
+	}
+
+	private boolean quantidadeMenorqueZeroOuVazia(Venda venda) {
+		return venda.getQuantidade() == null || venda.getQuantidade() <= 0;
+	}
+
+	private boolean precoProdutoMenorQueZeroOuNulo(Venda venda) {
+		return venda.getPrecoProduto() == null || venda.getPrecoProduto() <= 0;
+	}
+
+	private boolean celularNuloOuVazio(Venda venda) {
+		return venda.getCelular() == null || venda.getCelular().trim().isEmpty();
+	}
+
+	private boolean artistaNuloOuvazio(Venda venda) {
+		return venda.getArtista() == null || venda.getArtista().trim().isEmpty();
 	}
 
 	public List<Venda> listar() {
@@ -60,7 +88,7 @@ public class VendasService {
 		if (vendas == null || vendas.isEmpty()) {
 			throw new Exception("Lista está vazia");
 		}
-		
+
 		// Inicializa o maior valor com o primeiro elemento da lista
 		Double maiorVenda = vendas.get(0).getPrecoProduto() * vendas.get(0).getQuantidade();
 
@@ -76,7 +104,6 @@ public class VendasService {
 		// 3,5,1
 		return maiorVenda;
 	}
-	
 
 	public Double menorVenda() throws Exception {
 		List<Venda> vendas = vendasRepositorio.listar();
@@ -87,7 +114,7 @@ public class VendasService {
 
 		// Inicializa o maior valor com o primeiro elemento da lista
 		Double menorVenda = vendas.get(0).getPrecoProduto() * vendas.get(0).getQuantidade();
- 
+
 		// Itera sobre a lista e encontra o maior valor
 		for (Venda venda : vendas) {
 			double valorVenda = venda.getPrecoProduto() * venda.getQuantidade();

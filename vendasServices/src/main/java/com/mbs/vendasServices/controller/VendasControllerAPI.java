@@ -1,6 +1,5 @@
 package com.mbs.vendasServices.controller;
 
-
 import com.mbs.vendasServices.service.VendasService;
 
 import java.util.List;
@@ -19,13 +18,9 @@ import com.mbs.vendasServices.entidades.Venda;
 
 import com.mbs.vendasServices.service.VendasService;
 
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-
-
-
 
 @CrossOrigin(origins = "http://localhost:9005")
 @Controller
@@ -74,24 +69,21 @@ public class VendasControllerAPI {
 		System.out.println("totalValoresVenda ");
 		return ResponseEntity.ok(vendasService.totalValoresVenda());
 	}
-	
+
 	@Operation(summary = "retorna a maior venda")
-	@ApiResponses(value= {@ApiResponse(responseCode = "200", description = "retorna a maior venda")})
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "retorna a maior venda") })
 	@RequestMapping(value = "v1/venda/maior_venda", method = RequestMethod.GET)
-	public ResponseEntity<Double> vendaMaior() throws Exception{
+	public ResponseEntity<Double> vendaMaior() throws Exception {
 		System.out.println("Maior venda ");
 		return ResponseEntity.ok(vendasService.maiorVenda());
 	}
-	
-	
+
 	@Operation(summary = "retorna a menor venda")
-	@ApiResponses(value= {@ApiResponse(responseCode = "200", description = "retorna a menor venda")})
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "retorna a menor venda") })
 	@RequestMapping(value = "v1/venda/menor_venda", method = RequestMethod.GET)
-	public ResponseEntity<Double> vendaMenor() throws Exception{
+	public ResponseEntity<Double> vendaMenor() throws Exception {
 		System.out.println("Maior venda ");
 		return ResponseEntity.ok(vendasService.menorVenda());
 	}
-
-	
 
 }

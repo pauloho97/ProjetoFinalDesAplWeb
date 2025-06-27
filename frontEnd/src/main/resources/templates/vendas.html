@@ -1,35 +1,55 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-  <title>Front End VENDAS</title>
+  <title>Vendas Ateliê de Obras</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-  <h1>FRONT-END VENDAS</h1>
+  <h1>Ateliê - Cadastro de Vendas</h1>
 
-  <h3>Cadastro das vendas</h3>
+  <h3>Nova Venda</h3>
   <table>
     <tr>
       <td>Código do cliente:</td>
       <td><input type="text" id="codigoCliente" size="50"></td>
     </tr>
     <tr>
-      <td>Nome do produto:</td>
+      <td>Nome da obra:</td>
       <td><input type="text" id="nomeProduto" size="50"></td>
     </tr>
     <tr>
-      <td>Preço do produto:</td>
+      <td>Preço da obra:</td>
       <td><input type="text" id="precoProduto" size="20"></td>
     </tr>
     <tr>
       <td>Quantidade:</td>
-      <td><input type="text" id="quantidade" size="50"></td>
+      <td><input type="text" id="quantidade" size="20"></td>
     </tr>
     <tr>
-      <td>Email:</td>
-      <td><input type="text" id="email" size="50"></td>
+      <td>Celular:</td>
+      <td><input type="text" id="celular" size="30"></td>
     </tr>
-  </table> 
+    <tr>
+      <td>Artista:</td>
+      <td><input type="text" id="artista" size="50"></td>
+    </tr>
+    <tr>
+      <td>Material usado:</td>
+      <td><input type="text" id="material" size="50"></td>
+    </tr>
+    <tr>
+      <td>Tipo da obra:</td>
+      <td>
+        <select id="tipoObra">
+          <option value="ceramica">Cerâmica</option>
+          <option value="bordado">Bordado</option>
+          <option value="desenho">Desenho</option>
+          <option value="pintura">Pintura</option>
+          <option value="outro">Outro</option>
+        </select>
+      </td>
+    </tr>
+  </table>
   <button onclick="criarVenda()">Adicionar</button>
 
   <h3>Maior Venda</h3>
@@ -50,20 +70,20 @@
     const nomeProduto = document.getElementById("nomeProduto").value;
     const precoProduto = document.getElementById("precoProduto").value;
     const quantidade = document.getElementById("quantidade").value;
-    const email = document.getElementById("email").value;
-
-    // Validação simples de e-mail
-    if (!email.includes("@") || !email.includes(".")) {
-      alert("Digite um e-mail válido.");
-      return;
-    }
+    const celular = document.getElementById("celular").value;
+    const artista = document.getElementById("artista").value;
+    const material = document.getElementById("material").value;
+    const tipoObra = document.getElementById("tipoObra").value;
 
     const body = {
       codCliente,
       nomeProduto,
       precoProduto,
       quantidade,
-      email
+      celular,
+      artista,
+      material,
+      tipoObra
     };
 
     try {
@@ -79,20 +99,22 @@
         throw new Error(resultado);
       }
 
-      alert("Sucesso no cadastro da venda! ID: " + resultado);
+      alert("Venda cadastrada com sucesso! ID: " + resultado);
 
-      // Limpa os campos
       document.getElementById("codigoCliente").value = "";
       document.getElementById("nomeProduto").value = "";
       document.getElementById("precoProduto").value = "";
       document.getElementById("quantidade").value = "";
-      document.getElementById("email").value = "";
+      document.getElementById("celular").value = "";
+      document.getElementById("artista").value = "";
+      document.getElementById("material").value = "";
+      document.getElementById("tipoObra").value = "ceramica";
 
       carregarVendas();
       carregarMaiorVenda();
       carregarMenorVenda();
     } catch (error) {
-      alert("Erro na venda: " + error.message);
+      alert("Erro ao cadastrar venda: " + error.message);
     }
   }
 
@@ -108,14 +130,17 @@
         return;
       }
 
-      let linhas = "<tr><th>Cliente</th><th>Email</th><th>Produto</th><th>Preço</th><th>Qtd</th><th>Total</th></tr>";
+      let linhas = "<tr><th>Cliente</th><th>Celular</th><th>Obra</th><th>Tipo</th><th>Artista</th><th>Material</th><th>Preço</th><th>Qtd</th><th>Total</th></tr>";
       vendas.forEach(v => {
         const total = v.precoProduto * v.quantidade;
         linhas += `
           <tr>
             <td>${v.codCliente}</td>
-            <td>${v.email || '-'}</td>
+            <td>${v.celular || '-'}</td>
             <td>${v.nomeProduto}</td>
+            <td>${v.tipoObra || '-'}</td>
+            <td>${v.artista || '-'}</td>
+            <td>${v.material || '-'}</td>
             <td>R$ ${Number(v.precoProduto).toFixed(2)}</td>
             <td>${v.quantidade}</td>
             <td>R$ ${total.toFixed(2)}</td>
