@@ -22,10 +22,10 @@ public interface VendasServiceRoteamento {
 	@RequestMapping(value = "/v1/venda/total_venda", method = RequestMethod.GET)
 	public ResponseEntity<Integer> totalVenda();
 	
-	@RequestMapping(value = "v1/venda/maior_venda", method = RequestMethod.GET)
+	@RequestMapping(value = "/v1/venda/maior_venda", method = RequestMethod.GET)
 	public ResponseEntity<Double> vendaMaior();
 	
-	@RequestMapping(value = "v1/venda/menor_venda", method = RequestMethod.GET)
+	@RequestMapping(value = "/v1/venda/menor_venda", method = RequestMethod.GET)
 	public ResponseEntity<Double> vendaMenor();
 	
 }

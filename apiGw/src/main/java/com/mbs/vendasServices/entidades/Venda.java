@@ -10,6 +10,8 @@ public class Venda {
 	private Double precoProduto;
 	private Date dataVenda;
 	private Integer quantidade;
+	private String status;
+	private String email;
 	
 	public Integer getCodCliente() {
 		return codCliente;
@@ -47,10 +49,17 @@ public class Venda {
 	public void setQuantidade(Integer quantidade) {
 		this.quantidade = quantidade;
 	}
-	
-	
-	
-	
-	
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	
 }

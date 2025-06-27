@@ -1,31 +1,36 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
   <title>Front End VENDAS</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
   <h1>FRONT-END VENDAS</h1>
+
   <h3>Cadastro das vendas</h3>
   <table>
     <tr>
       <td>Código do cliente:</td>
-      <td><input type="text" id="codigoCliente" size="50"><br></td>
+      <td><input type="text" id="codigoCliente" size="50"></td>
     </tr>
     <tr>
       <td>Nome do produto:</td>
-      <td><input type="text" id="nomeProduto" size="50"><br></td>
+      <td><input type="text" id="nomeProduto" size="50"></td>
     </tr>
     <tr>
       <td>Preço do produto:</td>
-      <td><input type="text" id="precoProduto" size="20"><br></td>
+      <td><input type="text" id="precoProduto" size="20"></td>
     </tr>
     <tr>
       <td>Quantidade:</td>
-      <td><input type="text" id="quantidade" size="50"><br></td>
+      <td><input type="text" id="quantidade" size="50"></td>
+    </tr>
+    <tr>
+      <td>Email:</td>
+      <td><input type="text" id="email" size="50"></td>
     </tr>
   </table> 
-  <button onclick="criarCliente()">Adicionar</button>
+  <button onclick="criarVenda()">Adicionar</button>
 
   <h3>Maior Venda</h3>
   <div id="maiorVenda">Carregando...</div>
@@ -34,94 +39,119 @@
   <div id="menorVenda">Carregando...</div>
 
   <h3>Listagem de Vendas</h3>
-  <div id="listaVendas"></div>
-
-</body>
+  <div id="listaVendas">Carregando...</div>
 
 <script type="text/javascript">
-const urlAPI = "http://localhost:9000/v1/processarVenda";
+  const urlProcessarVenda = "http://localhost:9000/v1/processarVenda";
+  const urlVendas = "http://localhost:9000/v1/venda";
 
-// Função para criar uma nova venda
-async function criarCliente() {
-  const precoProduto = document.getElementById("precoProduto").value;
-  const nomeProduto = document.getElementById("nomeProduto").value;
-  const quantidade = document.getElementById("quantidade").value;
-  const codigoCliente = document.getElementById("codigoCliente").value;
+  async function criarVenda() {
+    const codCliente = document.getElementById("codigoCliente").value;
+    const nomeProduto = document.getElementById("nomeProduto").value;
+    const precoProduto = document.getElementById("precoProduto").value;
+    const quantidade = document.getElementById("quantidade").value;
+    const email = document.getElementById("email").value;
 
-  const body = {
-    "codCliente": codigoCliente,
-    "nomeProduto": nomeProduto,
-    "quantidade": quantidade,
-    "precoProduto": precoProduto
-  };
-
-  await fetch(urlAPI, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body)
-  }).then(response => {
-    if (response.status == 200) {
-      alert("Sucesso no cadastro da venda");
-      document.getElementById("precoProduto").value = "";
-      document.getElementById("nomeProduto").value = "";
-      document.getElementById("quantidade").value = "";
-      document.getElementById("codigoCliente").value = "";
-    } else {
-      response.text().then(d => alert("Erro na venda \n" + d));
+    // Validação simples de e-mail
+    if (!email.includes("@") || !email.includes(".")) {
+      alert("Digite um e-mail válido.");
+      return;
     }
-  });
+
+    const body = {
+      codCliente,
+      nomeProduto,
+      precoProduto,
+      quantidade,
+      email
+    };
+
+    try {
+      const response = await fetch(urlProcessarVenda, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      const resultado = await response.text();
+
+      if (!response.ok) {
+        throw new Error(resultado);
+      }
+
+      alert("Sucesso no cadastro da venda! ID: " + resultado);
+
+      // Limpa os campos
+      document.getElementById("codigoCliente").value = "";
+      document.getElementById("nomeProduto").value = "";
+      document.getElementById("precoProduto").value = "";
+      document.getElementById("quantidade").value = "";
+      document.getElementById("email").value = "";
+
+      carregarVendas();
+      carregarMaiorVenda();
+      carregarMenorVenda();
+    } catch (error) {
+      alert("Erro na venda: " + error.message);
+    }
+  }
+
+  async function carregarVendas() {
+    try {
+      const response = await fetch(urlVendas);
+      const vendas = await response.json();
+      const listaVendas = document.getElementById("listaVendas");
+      listaVendas.innerHTML = "";
+
+      if (!vendas.length) {
+        listaVendas.innerHTML = `Nenhuma venda cadastrada<br><br><input type='button' onclick='carregarVendas()' value='Atualizar'/>`;
+        return;
+      }
+
+      let linhas = "<tr><th>Cliente</th><th>Email</th><th>Produto</th><th>Preço</th><th>Qtd</th><th>Total</th></tr>";
+      vendas.forEach(v => {
+        const total = v.precoProduto * v.quantidade;
+        linhas += `
+          <tr>
+            <td>${v.codCliente}</td>
+            <td>${v.email || '-'}</td>
+            <td>${v.nomeProduto}</td>
+            <td>R$ ${Number(v.precoProduto).toFixed(2)}</td>
+            <td>${v.quantidade}</td>
+            <td>R$ ${total.toFixed(2)}</td>
+          </tr>
+        `;
+      });
+
+      listaVendas.innerHTML = '<table border="1">' + linhas + '</table><br><input type="button" onclick="carregarVendas()" value="Atualizar"/>';
+    } catch (error) {
+      console.error("Erro ao carregar vendas:", error);
+    }
+  }
+
+  async function carregarMaiorVenda() {
+    try {
+      const response = await fetch(`${urlVendas}/maior_venda`);
+      const valor = await response.json();
+      document.getElementById("maiorVenda").innerText = "R$ " + valor.toFixed(2);
+    } catch (error) {
+      console.error("Erro ao carregar maior venda:", error);
+    }
+  }
+
+  async function carregarMenorVenda() {
+    try {
+      const response = await fetch(`${urlVendas}/menor_venda`);
+      const valor = await response.json();
+      document.getElementById("menorVenda").innerText = "R$ " + valor.toFixed(2);
+    } catch (error) {
+      console.error("Erro ao carregar menor venda:", error);
+    }
+  }
 
   carregarVendas();
   carregarMaiorVenda();
   carregarMenorVenda();
-}
-
-// Carrega a lista de vendas
-async function carregarVendas() {
-  const response = await fetch(urlAPI);
-  const vendas = await response.json();
-  const listaVendas = document.getElementById("listaVendas");
-  listaVendas.innerHTML = "";
-
-  if (!vendas.length) {
-    listaVendas.innerHTML = `Nenhuma venda cadastrada<br><br><input type='button' onclick='carregarVendas()' value='Atualizar'/>`;
-    return;
-  }
-
-  let linhas = "<tr><th>Cliente</th><th>Produto</th><th>Preço</th><th>Qtd</th><th>Preço final</th></tr>";
-  vendas.forEach(v => {
-  	const totalVenda = v.precoProduto * v.quantidade;
-    linhas += `
-      <tr>
-        <td>${v.codCliente}</td>
-        <td>${v.nomeProduto}</td>
-        <td>R$ ${v.precoProduto.toFixed(2)}</td>
-        <td>${v.quantidade}</td>
-        <td>R$ ${totalVenda.toFixed(2)}</td>
-      </tr>
-    `;
-  });
-
-  listaVendas.innerHTML = '<table border="1">' + linhas + '</table><br><input type="button" onclick="carregarVendas()" value="Atualizar"/>';
-}
-
-// Função para carregar maior venda
-async function carregarMaiorVenda() {
-  const response = await fetch(`${urlAPI}/maior_venda`);
-  const valor = await response.json();
-  document.getElementById("maiorVenda").innerText = "R$ " + valor.toFixed(2);
-}
-
-// Função para carregar menor venda
-async function carregarMenorVenda() {
-  const response = await fetch(`${urlAPI}/menor_venda`);
-  const valor = await response.json();
-  document.getElementById("menorVenda").innerText = "R$ " + valor.toFixed(2);
-}
-
-// Inicializa tudo ao carregar
-carregarVendas();
-carregarMaiorVenda();
-carregarMenorVenda();
 </script>
+</body>
 </html>

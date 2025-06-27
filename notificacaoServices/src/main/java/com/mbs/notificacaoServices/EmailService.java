@@ -1,4 +1,4 @@
-package com.mbs.notificacaoServices.services;
+package com.mbs.notificacaoServices;
 
 import java.util.Date;
 import java.util.Properties;

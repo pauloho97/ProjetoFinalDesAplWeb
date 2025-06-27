@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.mbs.clienteServices.entidades.Cliente;
 
@@ -20,9 +21,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 //import com.mbs.enderecomvc.entidades.Endereco;
 
-@Tag(name = "projeto cliente API", description = "Projeto para aula de ddesenvolvimento web cliente API")
+@Tag(name = "projeto cliente API", description = "Projeto final para cliente do ateliê")
 
-@Controller
+@RestController
 @CrossOrigin(origins = "http://localhost:9005")
 public class ClienteControllerAPI {
 
@@ -39,7 +40,8 @@ public class ClienteControllerAPI {
 
 		// simples validacao de negocio
 		if (cliente.getNome() == null || (cliente.getNome() != null && cliente.getNome().length() <= 2)) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nome do cliente deve ter no minimo 3 caracteres");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body("Nome do cliente deve ter no minimo 3 caracteres");
 		}
 		// cria um id para o cliente
 		cliente.setId(++id);
@@ -53,19 +55,19 @@ public class ClienteControllerAPI {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	@Operation(summary = "listar clientes")
-	@ApiResponses(value = {@ApiResponse(responseCode = "200",description = "retorna a lista de clientes")})
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "retorna a lista de clientes") })
 	@RequestMapping(value = "/v1/cliente", method = RequestMethod.GET)
 	public ResponseEntity<List<Cliente>> listar() {
 		System.out.println("executando listar ");
 		// retorna a lista de clientes
 		return ResponseEntity.ok(listaCliente);
 	}
-	
+
 	@Operation(summary = "deletar clientes")
-	@ApiResponses(value = {@ApiResponse(responseCode = "204", description = "deleta um cliente da lista"),
-			@ApiResponse(responseCode = "404", description = "retorna erro ao deletar um cliente da lista")})
+	@ApiResponses(value = { @ApiResponse(responseCode = "204", description = "deleta um cliente da lista"),
+			@ApiResponse(responseCode = "404", description = "retorna erro ao deletar um cliente da lista") })
 	@RequestMapping(value = "/v1/cliente/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> deletar(@PathVariable Integer id) {
 		System.out.println("executando deletar de cliente id " + id);
@@ -79,7 +81,7 @@ public class ClienteControllerAPI {
 	}
 
 	// SEGUIR IMPLEMENTACAO
-	@RequestMapping(value = "v1/cliente/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/v1/cliente/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Cliente> buscarCliente(@PathVariable Integer id) {
 
 		// Verifica se o código existe na lista de endereços
@@ -89,7 +91,7 @@ public class ClienteControllerAPI {
 
 			}
 		}
-		// NOT_FOUND, pois esse status é o 404, quando um recurso não foi enconrtado, no
+		// NOT_FOUND, pois esse status é o 404, quando um recurso não foi encontrado, no
 		// caso o cliente
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
@@ -116,8 +118,7 @@ public class ClienteControllerAPI {
 			if (cliente.getId().equals(id)) {
 
 				if (clienteAtualizado.getNome() == null || clienteAtualizado.getNome().length() < 3) {
-					return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-							.body("Erro: O nome do cliente deve ter no mínimo 3 caracteres.");
+					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro: O nome do cliente deve ter no mínimo 3 caracteres.");
 				} else {
 					// Atualiza o campo que o usuário deseja
 					if (clienteAtualizado.getNome() != null) {
