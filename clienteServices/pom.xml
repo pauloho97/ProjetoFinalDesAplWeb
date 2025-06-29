@@ -58,8 +58,13 @@
 		   <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 		   <version>2.0.2</version>
 		</dependency>
-		
-		
+
+
+		<dependency>
+			<groupId>com.mbs</groupId>
+			<artifactId>api_gw</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

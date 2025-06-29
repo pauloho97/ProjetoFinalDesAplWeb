@@ -27,7 +27,7 @@ public class VendasService {
 		
 		//matriz do tipo Object que contém: [funções boolean, String].
 		Object funcoesParaEntradasInvalidasObject[][] = {
-				{ codigoClienteInvalido(venda), "Código do cliente inválido" },
+				{ cpfInvalido(venda), "cpf inválido" },
 				{ nomeProdutoInvalido(venda), "Nome da obra inválido" },
 				{ quantidadeMenorqueZeroOuVazia(venda), "Quantidade inválida" },
 				{ precoProdutoMenorQueZeroOuNulo(venda), "Preço da obra inválido" },
@@ -44,8 +44,9 @@ public class VendasService {
 	}
 
 	// pequenas funções com regras de negócios
-	private boolean codigoClienteInvalido(Venda venda) {
-		return venda.getCodCliente() == null;
+	
+	private boolean cpfInvalido(Venda venda) {
+		return venda.getCpf() == null || venda.getCpf().trim().isEmpty();
 	}
 
 	private boolean nomeProdutoInvalido(Venda venda) {

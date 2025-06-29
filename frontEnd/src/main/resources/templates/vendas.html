@@ -10,8 +10,8 @@
   <h3>Nova Venda</h3>
   <table>
     <tr>
-      <td>Código do cliente:</td>
-      <td><input type="text" id="codigoCliente" size="50"></td>
+      <td>CPF do cliente:</td>
+      <td><input type="text" id="cpf" size="20" maxlength="11"></td>
     </tr>
     <tr>
       <td>Nome da obra:</td>
@@ -66,7 +66,7 @@
   const urlVendas = "http://localhost:9000/v1/venda";
 
   async function criarVenda() {
-    const codCliente = document.getElementById("codigoCliente").value;
+    const cpf = document.getElementById("cpf").value;
     const nomeProduto = document.getElementById("nomeProduto").value;
     const precoProduto = document.getElementById("precoProduto").value;
     const quantidade = document.getElementById("quantidade").value;
@@ -76,7 +76,7 @@
     const tipoObra = document.getElementById("tipoObra").value;
 
     const body = {
-      codCliente,
+      cpf,
       nomeProduto,
       precoProduto,
       quantidade,
@@ -95,13 +95,11 @@
 
       const resultado = await response.text();
 
-      if (!response.ok) {
-        throw new Error(resultado);
-      }
+      if (!response.ok) throw new Error(resultado);
 
-      alert("Venda cadastrada com sucesso! ID: " + resultado);
+      alert("Venda cadastrada com sucesso! Nº: " + resultado);
 
-      document.getElementById("codigoCliente").value = "";
+      document.getElementById("cpf").value = "";
       document.getElementById("nomeProduto").value = "";
       document.getElementById("precoProduto").value = "";
       document.getElementById("quantidade").value = "";
@@ -130,12 +128,12 @@
         return;
       }
 
-      let linhas = "<tr><th>Cliente</th><th>Celular</th><th>Obra</th><th>Tipo</th><th>Artista</th><th>Material</th><th>Preço</th><th>Qtd</th><th>Total</th></tr>";
+      let linhas = "<tr><th>CPF</th><th>Celular</th><th>Obra</th><th>Tipo</th><th>Artista</th><th>Material</th><th>Preço</th><th>Qtd</th><th>Total</th></tr>";
       vendas.forEach(v => {
         const total = v.precoProduto * v.quantidade;
         linhas += `
           <tr>
-            <td>${v.codCliente}</td>
+            <td>${v.cpf}</td>
             <td>${v.celular || '-'}</td>
             <td>${v.nomeProduto}</td>
             <td>${v.tipoObra || '-'}</td>

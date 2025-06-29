@@ -5,7 +5,6 @@ import java.util.Date;
 public class Venda {
 
     private Integer numeroVenda;     // ID da venda
-    private Integer codCliente;
     private String nomeProduto;      // nome da obra
     private Double precoProduto;
     private Integer quantidade;
@@ -14,22 +13,23 @@ public class Venda {
     private String material;
     private String tipoObra;
     private Date dataVenda;
+    private String cpf;
 
     // Getters e Setters
     public Integer getNumeroVenda() {
         return numeroVenda;
     }
 
-    public void setNumeroVenda(Integer numeroVenda) {
+    public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+
+	public void setNumeroVenda(Integer numeroVenda) {
         this.numeroVenda = numeroVenda;
-    }
-
-    public Integer getCodCliente() {
-        return codCliente;
-    }
-
-    public void setCodCliente(Integer codCliente) {
-        this.codCliente = codCliente;
     }
 
     public String getNomeProduto() {

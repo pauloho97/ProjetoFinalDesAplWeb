@@ -36,7 +36,7 @@ public class VendasControllerAPI {
 	@RequestMapping(value = "/v1/processarVenda", method = RequestMethod.POST)
 	public ResponseEntity<String> processarVenda(@RequestBody Venda venda) {
 		System.out.println("Processando venda");
-		ResponseEntity<Boolean> existeCliente = clienteServiceRoteamento.existeCliente(venda.getCodCliente());
+		ResponseEntity<Boolean> existeCliente = clienteServiceRoteamento.existeCliente(venda.getCpf());
 
 		if (existeCliente.getBody().equals(false)) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cliente não encontrado! ");
