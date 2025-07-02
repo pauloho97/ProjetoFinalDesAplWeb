@@ -9,49 +9,40 @@ public class Venda {
     private Double precoProduto;
     private Integer quantidade;
     private String celular;
-    private String artista;
-    private String material;
     private String tipoObra;
     private Date dataVenda;
     private String cpf;
     private String status;
-     
+    
 
     // Getters e Setters
-   
-    
-    
-    public void setNumeroVenda(Integer numeroVenda) {
-        this.numeroVenda = numeroVenda;
+    public Integer getNumeroVenda() {
+        return numeroVenda;
     }
 
-   
     public String getStatus() {
 		return status;
 	}
-
-
+    
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
 
 
 	public String getCpf() {
 		return cpf;
 	}
 
-
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
 
+	public void setNumeroVenda(Integer numeroVenda) {
+        this.numeroVenda = numeroVenda;
+    }
 
-	public Integer getNumeroVenda() {
-		return numeroVenda;
-	}
-
-
-	public String getNomeProduto() {
+    public String getNomeProduto() {
         return nomeProduto;
     }
 
@@ -81,22 +72,6 @@ public class Venda {
 
     public void setCelular(String celular) {
         this.celular = celular;
-    }
-
-    public String getArtista() {
-        return artista;
-    }
-
-    public void setArtista(String artista) {
-        this.artista = artista;
-    }
-
-    public String getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(String material) {
-        this.material = material;
     }
 
     public String getTipoObra() {

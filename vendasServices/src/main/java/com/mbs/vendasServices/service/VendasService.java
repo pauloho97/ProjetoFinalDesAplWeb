@@ -31,8 +31,7 @@ public class VendasService {
 				{ nomeProdutoInvalido(venda), "Nome da obra inválido" },
 				{ quantidadeMenorqueZeroOuVazia(venda), "Quantidade inválida" },
 				{ precoProdutoMenorQueZeroOuNulo(venda), "Preço da obra inválido" },
-				{ celularNuloOuVazio(venda), "Celular inválido" },
-				{ artistaNuloOuvazio(venda), "Nome do artista inválido" }, };
+				{ celularNuloOuVazio(venda), "Celular inválido" }};
 		
 		for (Object[] listandoObject : funcoesParaEntradasInvalidasObject) {
 			//se o primeiro elemento da lista for true, ele exibe seu par String
@@ -63,10 +62,6 @@ public class VendasService {
 
 	private boolean celularNuloOuVazio(Venda venda) {
 		return venda.getCelular() == null || venda.getCelular().trim().isEmpty();
-	}
-
-	private boolean artistaNuloOuvazio(Venda venda) {
-		return venda.getArtista() == null || venda.getArtista().trim().isEmpty();
 	}
 
 	public List<Venda> listar() {

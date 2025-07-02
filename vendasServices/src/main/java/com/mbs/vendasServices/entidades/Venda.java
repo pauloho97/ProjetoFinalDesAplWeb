@@ -9,8 +9,6 @@ public class Venda {
     private Double precoProduto;
     private Integer quantidade;
     private String celular;
-    private String artista;
-    private String material;
     private String tipoObra;
     private Date dataVenda;
     private String cpf;
@@ -62,22 +60,6 @@ public class Venda {
 
     public void setCelular(String celular) {
         this.celular = celular;
-    }
-
-    public String getArtista() {
-        return artista;
-    }
-
-    public void setArtista(String artista) {
-        this.artista = artista;
-    }
-
-    public String getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(String material) {
-        this.material = material;
     }
 
     public String getTipoObra() {

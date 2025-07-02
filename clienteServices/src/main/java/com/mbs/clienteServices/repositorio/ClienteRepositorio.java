@@ -33,6 +33,7 @@ public class ClienteRepositorio {
 
 	public Boolean existeCliente(String cpf) {
 		boolean resultado = listaCliente.stream().filter(obj -> obj.getCpf().equals(cpf)).findFirst().isPresent();
+		
 		return resultado;
 	}
 
