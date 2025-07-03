@@ -11,33 +11,40 @@ import com.mbs.vendasServices.entidades.Venda;
 @Component
 public class ProdutoListener {
 
-	@Value("${queue}")
-	String queue;
+    @Value("${queue}")
+    private String queue;
 
-	private EmailService emailService;
+    private final SmsService smsService;
 
-	@RabbitListener(queues = { "${queue}" })
-	public void receive(@Payload String fileBody) {
+    public ProdutoListener(SmsService smsService) {
+        this.smsService = smsService;
+    }
 
-		System.out.println("Mensagem recebida da fila " + queue + ": " + fileBody);
+    @RabbitListener(queues = { "${queue}" })
+    public void receive(@Payload String fileBody) {
+        System.out.println("Mensagem recebida da fila " + queue + ": " + fileBody);
 
-		// transformando string para json
-		Venda vendas = new Gson().fromJson(fileBody, Venda.class);
+        Venda vendas = new Gson().fromJson(fileBody, Venda.class);
 
-		System.out.println("Nome do Produto: " + vendas.getNomeProduto());
-		System.out.println("Status: " + vendas.getStatus());
-		System.out.println("Email: " + vendas.getEmail());
-		System.out.println("##############################");
+        System.out.println("Nome do Produto: " + vendas.getNomeProduto());
+        System.out.println("Status: " + vendas.getStatus());
+        System.out.println("Celular: " + vendas.getCelular());
+        System.out.println("##############################");
 
-		emailService.enviar(criarCorpoEmail(vendas), "Status de Venda", "", vendas.getEmail());
-	}
-	
-	private String criarCorpoEmail(Venda venda) {
-		StringBuilder mensagem = new StringBuilder();
-		mensagem
-		.append("Ola, cliente\n")
-		.append("vc comprou o produto ").append(venda.getNomeProduto()).append("\n")
-		.append("seu status é: ").append(venda.getStatus());
-		return mensagem.toString();
-	}
+        // Validação do número antes de enviar
+        String celular = vendas.getCelular();
+        if (celular != null && celular.matches("\\+55\\d{10,11}")) {
+            smsService.enviarSms(celular, criarMensagemSms(vendas));
+        } else {
+            System.err.println("Número de celular inválido ou não informado: " + celular);
+        }
+    }
+
+    private String criarMensagemSms(Venda venda) {
+        return String.format(
+            "Olá! Sua compra do produto '%s' foi registrada. Status: %s.",
+            venda.getNomeProduto(),
+            venda.getStatus()
+        );
+    }
 }

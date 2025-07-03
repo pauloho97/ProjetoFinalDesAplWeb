@@ -12,6 +12,7 @@ public class Venda {
     private String tipoObra;
     private Date dataVenda;
     private String cpf;
+    private String status;
 
     // Getters e Setters
     public Integer getNumeroVenda() {
@@ -20,6 +21,14 @@ public class Venda {
 
     public String getCpf() {
 		return cpf;
+	}
+   
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public void setCpf(String cpf) {

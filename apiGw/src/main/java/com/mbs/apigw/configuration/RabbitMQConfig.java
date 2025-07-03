@@ -1,4 +1,4 @@
-/*package com.mbs.apigw.configuration;
+package com.mbs.apigw.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,8 +43,8 @@ public class RabbitMQConfig {
 	@Bean
 	public AmqpTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
 		final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-		rabbitTemplate.setMessageConverter(jsonMessageConverter());
+		rabbitTemplate.setMessageConverter(jsconMessageConverter());
 		return rabbitTemplate;
 	}
 
-}*/
+}
