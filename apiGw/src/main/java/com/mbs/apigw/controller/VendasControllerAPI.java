@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
 import com.mbs.apigw.comunicacao.ClienteServiceRoteamento;
 import com.mbs.apigw.comunicacao.VendasServiceRoteamento;
 import com.mbs.vendasServices.entidades.Venda;
@@ -50,9 +51,9 @@ public class VendasControllerAPI {
 		}
 
 		venda.setStatus("aprovado");
-		// String vendaJson = new Gson().toJson(venda);
-		//System.out.println("Enviando mensagem para o Brocker..");
-		//rabbitTemplate.convertAndSend("vendas", "routing-key-teste", venda);
+		String vendaJson = new Gson().toJson(venda);
+		System.out.println("Enviando mensagem para o Brocker..");
+		rabbitTemplate.convertAndSend("vendas", "routing-key-teste", venda);
 
 		// retorno o id da venda realizada no body.
 		return ResponseEntity.status(HttpStatus.CREATED).body(resultadoVenda.getBody());
