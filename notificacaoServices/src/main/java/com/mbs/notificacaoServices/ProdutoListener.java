@@ -24,6 +24,7 @@ public class ProdutoListener {
     public void receive(@Payload String fileBody) {
         System.out.println("Mensagem recebida da fila " + queue + ": " + fileBody);
 
+        // ❗ Apenas essa linha é suficiente
         Venda vendas = new Gson().fromJson(fileBody, Venda.class);
 
         System.out.println("Nome do Produto: " + vendas.getNomeProduto());
@@ -31,7 +32,6 @@ public class ProdutoListener {
         System.out.println("Celular: " + vendas.getCelular());
         System.out.println("##############################");
 
-        // Validação do número antes de enviar
         String celular = vendas.getCelular();
         if (celular != null && celular.matches("\\+55\\d{10,11}")) {
             smsService.enviarSms(celular, criarMensagemSms(vendas));
@@ -39,6 +39,8 @@ public class ProdutoListener {
             System.err.println("Número de celular inválido ou não informado: " + celular);
         }
     }
+
+
 
     private String criarMensagemSms(Venda venda) {
         return String.format(
