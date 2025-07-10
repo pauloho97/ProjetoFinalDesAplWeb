@@ -95,7 +95,7 @@
   </tr>
   <tr>
     <td>Preço da obra:</td>
-    <td><input type="text" id="precoProduto" placeholder="Ex: 150.00" oninput="permitirApenasNumeros(this)"></td>
+    <td><input type="text" id="precoProduto" placeholder="Ex: 150,00" oninput="permitirApenasNumerosEVirgula(this)"></td>
   </tr>
   <tr>
     <td>Quantidade:</td>
@@ -134,45 +134,44 @@ function permitirApenasNumeros(input) {
   input.value = input.value.replace(/\D/g, "");
 }
 
+function permitirApenasNumerosEVirgula(input) {
+  input.value = input.value.replace(/[^\d,]/g, "");
+}
+
 function mascararCelular(input) {
-	  let valor = input.value.replace(/\D/g, ""); // remove tudo que não é número
+  let valor = input.value.replace(/\D/g, "");
 
-	  // Se o campo estiver vazio (ou quase), limpa totalmente
-	  if (valor.length <= 2) {
-	    input.value = valor ? "+" + valor : "";
-	    return;
-	  }
+  if (valor.length <= 2) {
+    input.value = valor ? "+" + valor : "";
+    return;
+  }
 
-	  // Garante prefixo 55 no começo
-	  if (!valor.startsWith("55")) {
-	    valor = "55" + valor;
-	  }
+  if (!valor.startsWith("55")) {
+    valor = "55" + valor;
+  }
 
-	  valor = valor.slice(2); // remove o 55 para formatar
+  valor = valor.slice(2);
 
-	  // Garante no máximo 11 dígitos
-	  if (valor.length > 11) {
-	    valor = valor.slice(0, 11);
-	  }
+  if (valor.length > 11) {
+    valor = valor.slice(0, 11);
+  }
 
-	  // Força o 9 depois do DDD se ainda não tiver
-	  if (valor.length >= 3 && valor[2] !== '9') {
-	    valor = valor.slice(0, 2) + '9' + valor.slice(2);
-	  }
+  if (valor.length >= 3 && valor[2] !== '9') {
+    valor = valor.slice(0, 2) + '9' + valor.slice(2);
+  }
 
-	  let formatado = "+55";
+  let formatado = "+55";
 
-	  if (valor.length >= 7) {
-	    formatado += valor.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, " ($1) $2-$3").replace(/[-\s]+$/, "");
-	  } else if (valor.length >= 3) {
-	    formatado += valor.replace(/^(\d{2})(\d{0,5})/, " ($1) $2");
-	  } else if (valor.length > 0) {
-	    formatado += " (" + valor;
-	  }
+  if (valor.length >= 7) {
+    formatado += valor.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, " ($1) $2-$3").replace(/[-\s]+$/, "");
+  } else if (valor.length >= 3) {
+    formatado += valor.replace(/^(\d{2})(\d{0,5})/, " ($1) $2");
+  } else if (valor.length > 0) {
+    formatado += " (" + valor;
+  }
 
-	  input.value = formatado;
-	}
-
+  input.value = formatado;
+}
 
 const urlProcessarVenda = "http://localhost:9000/v1/processarVenda";
 const urlVendas = "http://localhost:9000/v1/venda";
@@ -194,29 +193,29 @@ async function criarVenda() {
     alert("Informe o nome da obra.");
     return;
   }
-  if (!/^\d+(\.\d{1,2})?$/.test(precoProduto)) {
-    alert("Preço inválido. Use apenas números.");
+
+  const precoNormalizado = precoProduto.replace(",", ".");
+  if (!/^\d+(\.\d{1,2})?$/.test(precoNormalizado)) {
+    alert("Preço inválido. Use vírgula ou ponto para decimais.");
     return;
   }
+
   if (!/^\d+$/.test(quantidade) || parseInt(quantidade) <= 0) {
     alert("Quantidade inválida.");
     return;
   }
-  
- 
 
   if (!/^55\d{11}$/.test(celularNumeros)) {
     alert("Celular deve conter 13 números: código do país +55, DDD e número começando com 9.");
     return;
   }
 
-
   celular = "+" + celularNumeros.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
 
   const body = {
     cpf,
     nomeProduto,
-    precoProduto: Number(precoProduto),
+    precoProduto: Number(precoNormalizado),
     quantidade: Number(quantidade),
     celular,
     tipoObra
@@ -235,7 +234,6 @@ async function criarVenda() {
 
     alert("Venda cadastrada com sucesso! Nº: " + resultado);
 
-    // Limpar campos
     ["cpf", "nomeProduto", "precoProduto", "quantidade", "celular"].forEach(id => document.getElementById(id).value = "");
     document.getElementById("tipoObra").value = "ceramica";
 
@@ -269,9 +267,9 @@ async function carregarVendas() {
           <td>${v.celular || '-'}</td>
           <td>${v.nomeProduto}</td>
           <td>${v.tipoObra || '-'}</td>
-          <td>R$ ${Number(v.precoProduto).toFixed(2)}</td>
+          <td>R$ ${v.precoProduto.toFixed(2).replace('.', ',')}</td>
           <td>${v.quantidade}</td>
-          <td>R$ ${total.toFixed(2)}</td>
+          <td>R$ ${total.toFixed(2).replace('.', ',')}</td>
         </tr>
       `;
     });
@@ -286,7 +284,7 @@ async function carregarMaiorVenda() {
   try {
     const response = await fetch(`${urlVendas}/maior_venda`);
     const valor = await response.json();
-    document.getElementById("maiorVenda").innerText = "R$ " + valor.toFixed(2);
+    document.getElementById("maiorVenda").innerText = "R$ " + valor.toFixed(2).replace('.', ',');
   } catch {
     document.getElementById("maiorVenda").innerText = "Erro ao carregar dados.";
   }
@@ -296,7 +294,7 @@ async function carregarMenorVenda() {
   try {
     const response = await fetch(`${urlVendas}/menor_venda`);
     const valor = await response.json();
-    document.getElementById("menorVenda").innerText = "R$ " + valor.toFixed(2);
+    document.getElementById("menorVenda").innerText = "R$ " + valor.toFixed(2).replace('.', ',');
   } catch {
     document.getElementById("menorVenda").innerText = "Erro ao carregar dados.";
   }
